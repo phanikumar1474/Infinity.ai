@@ -6,11 +6,24 @@ const fileInput = promptForm.querySelector("#file-input");
 const fileUploadWrapper = promptForm.querySelector(".file-upload-wrapper");
 const themeToggleBtn = document.querySelector("#theme-toggle-btn");
 // API Setup
-const API_KEY = "AIzaSyCQJLAsJdk1x48yOpx3HCqdScaRY-nsCOU";
-const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=" + API_KEY;
-let controller, typingInterval;
-const chatHistory = [];
-const userData = { message: "", file: {} };
+const OPENAI_API_KEY = "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";
+
+fetch("https://api.openai.com/v1/chat/completions", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    "Authorization": `Bearer ${OPENAI_API_KEY}`,
+  },
+  body: JSON.stringify({
+    model: "gpt-4o-mini",
+    messages: [
+      { role: "user", content: "Hello! How are you?" }
+    ],
+  }),
+})
+.then(res => res.json())
+.then(data => console.log(data.choices[0].message.content))
+.catch(err => console.error(err));
 // Set initial theme from local storage
 const isLightTheme = localStorage.getItem("themeColor") === "light_mode";
 document.body.classList.toggle("light-theme", isLightTheme);
@@ -158,6 +171,7 @@ document.addEventListener("click", ({ target }) => {
 // Add event listeners for form submission and file input click
 promptForm.addEventListener("submit", handleFormSubmit);
 promptForm.querySelector("#add-file-btn").addEventListener("click", () => fileInput.click());
+
 
 
 
